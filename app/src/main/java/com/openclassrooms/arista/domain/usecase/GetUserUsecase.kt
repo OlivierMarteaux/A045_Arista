@@ -5,7 +5,7 @@ import com.openclassrooms.arista.domain.model.User
 import javax.inject.Inject
 
 class GetUserUsecase @Inject constructor(private val userRepository: UserRepository) {
-    suspend fun execute(): User {
+    suspend fun execute(): User? {
         return userRepository.getUser()
     }
 }

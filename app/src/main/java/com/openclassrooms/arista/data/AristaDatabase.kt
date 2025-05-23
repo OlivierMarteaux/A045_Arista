@@ -20,17 +20,25 @@ abstract class AristaDatabase: RoomDatabase() {
 
     // a singleton instance of the database
     companion object {
+        @Volatile
         private var instance: AristaDatabase? = null
         fun getInstance(context: Context): AristaDatabase {
+//            context.deleteDatabase("app_database") // ✅ Ensure onCreate runs in debug
             return instance?: synchronized(this) {
-                Room.databaseBuilder(
-                    context,
-                    AristaDatabase::class.java,
-                    "arista.db"
-                )
-                    .createFromAsset("database/arista.db")
+
+            val db = Room
+                    .databaseBuilder(
+                        context,
+                        AristaDatabase::class.java,
+                        "arista.db"
+                    )
                     .build()
-                    .also { instance = it }
+
+                // prepopulate the database by calling the database callback
+                instance = db
+                db.openHelper.writableDatabase
+                AristaDatabaseCallback(db).onCreate(db.openHelper.writableDatabase)
+                return db
             }
         }
     }

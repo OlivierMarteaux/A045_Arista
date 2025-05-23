@@ -35,11 +35,6 @@ class MainActivity : AppCompatActivity() {
                 .also { selectedMenuItemId = it }
             binding.bottomNavigation.selectedItemId = selectedMenuItemId
         }
-//        // Export database for initial database creation
-//        lifecycleScope.launch {
-//            delay(5000)
-//            exportRoomDatabase(this@MainActivity)
-//        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

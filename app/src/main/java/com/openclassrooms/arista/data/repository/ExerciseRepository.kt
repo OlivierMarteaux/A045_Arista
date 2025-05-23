@@ -27,12 +27,8 @@ class ExerciseRepository @Inject constructor (private val exerciseDao: ExerciseD
     fun getAllExercises(): Flow<List<Exercise>> = exerciseDao.getAllExercises()
 
     // Add a new exercise
-    suspend fun addExercise(exercise: Exercise) {
-        exerciseDao.insertExercise(exercise)
-    }
+    suspend fun addExercise(exercise: Exercise) { exerciseDao.insertExercise(exercise) }
 
     // Delete an exercise
-    suspend fun deleteExercise(exercise: Exercise) {
-        exerciseDao.deleteExercise(exercise)
-    }
+    suspend fun deleteExercise(exercise: Exercise) { exerciseDao.deleteExercise(exercise) }
 }

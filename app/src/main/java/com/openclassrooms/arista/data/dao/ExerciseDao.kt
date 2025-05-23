@@ -2,7 +2,6 @@ package com.openclassrooms.arista.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
 import com.openclassrooms.arista.domain.model.Exercise
