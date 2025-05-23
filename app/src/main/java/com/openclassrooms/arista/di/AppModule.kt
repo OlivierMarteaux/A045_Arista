@@ -3,6 +3,8 @@ package com.openclassrooms.arista.di
 import android.content.Context
 import androidx.room.Room
 import com.openclassrooms.arista.data.AristaDatabase
+import com.openclassrooms.arista.data.dao.ExerciseDao
+import com.openclassrooms.arista.data.dao.SleepDao
 import com.openclassrooms.arista.data.dao.UserDao
 import com.openclassrooms.arista.data.repository.ExerciseRepository
 import com.openclassrooms.arista.data.repository.SleepRepository
@@ -20,11 +22,13 @@ class AppModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AristaDatabase {
-//        return Room.databaseBuilder(
-//            context,
-//            AristaDatabase::class.java,
-//            "arista.db"
-//        ).build()
+//        return Room
+//            .databaseBuilder(
+//                context,
+//                AristaDatabase::class.java,
+//                "arista.db")
+//            .createFromAsset("database/arista.db")
+//            .build()
         return AristaDatabase.getInstance(context)
     }
     @Provides
@@ -45,13 +49,13 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideSleepRepository(): SleepRepository {
-        return SleepRepository()
+    fun provideSleepRepository(sleepDao: SleepDao): SleepRepository {
+        return SleepRepository(sleepDao)
     }
 
     @Provides
     @Singleton
-    fun provideExerciseRepository(): ExerciseRepository {
-        return ExerciseRepository()
+    fun provideExerciseRepository(exerciseDao: ExerciseDao): ExerciseRepository {
+        return ExerciseRepository(exerciseDao)
     }
 }

@@ -7,8 +7,6 @@ import app.cash.turbine.test
 import com.openclassrooms.arista.data.AristaDatabase
 import com.openclassrooms.arista.domain.model.Exercise
 import com.openclassrooms.arista.domain.model.ExerciseCategory
-import com.openclassrooms.arista.domain.model.User
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

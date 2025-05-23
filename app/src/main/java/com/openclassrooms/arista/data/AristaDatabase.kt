@@ -28,7 +28,7 @@ abstract class AristaDatabase: RoomDatabase() {
                     AristaDatabase::class.java,
                     "arista.db"
                 )
-//                    .createFromAsset("database/arista.db")
+                    .createFromAsset("database/arista.db")
                     .build()
                     .also { instance = it }
             }

@@ -1,6 +1,5 @@
 package com.openclassrooms.arista.data.repository
 
-import com.openclassrooms.arista.data.FakeApiService
 import com.openclassrooms.arista.data.dao.UserDao
 import com.openclassrooms.arista.domain.model.User
 import javax.inject.Inject
