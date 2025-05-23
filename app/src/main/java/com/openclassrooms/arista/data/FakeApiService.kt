@@ -10,8 +10,8 @@ import java.util.Optional
 
 class FakeApiService {
 
-    // Static data
-    var user: User = User(1, "John Doe", "johndoe@example.com")
+//    // Static data
+//    var user: User = User(1, "John Doe", "johndoe@example.com")
 
     private val sleepData = listOf(
         Sleep(1, LocalDateTime.now().minusDays(1), 7, 8),

@@ -1,25 +1,50 @@
 package com.openclassrooms.arista.ui.user
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.openclassrooms.arista.domain.model.User
 import com.openclassrooms.arista.domain.usecase.GetUserUsecase
+import com.openclassrooms.arista.domain.usecase.AddUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//@HiltViewModel
+//class UserDataViewModel @Inject constructor(private val getUserUsecase: GetUserUsecase) :
+//    ViewModel() {
+//    private val _userFlow = MutableStateFlow<User?>(null)
+//    val userFlow: StateFlow<User?> = _userFlow.asStateFlow()
+//
+//    init {
+//        loadUserData()
+//    }
+//
+//    private fun loadUserData() {
+//        val user = getUserUsecase.execute()
+//        _userFlow.value = user
+//    }
+//}
+
 @HiltViewModel
-class UserDataViewModel @Inject constructor(private val getUserUsecase: GetUserUsecase) :
+class UserDataViewModel @Inject constructor(
+    private val addUserUsecase: AddUserUseCase,
+    private val getUserUsecase: GetUserUsecase
+) :
     ViewModel() {
     private val _userFlow = MutableStateFlow<User?>(null)
     val userFlow: StateFlow<User?> = _userFlow.asStateFlow()
 
     init {
-        loadUserData()
+        viewModelScope.launch {
+            addUserUsecase.addUser(User(1, "User", "user@example.com"))
+            loadUserData()
+        }
     }
 
-    private fun loadUserData() {
+    private suspend fun loadUserData() {
         val user = getUserUsecase.execute()
         _userFlow.value = user
     }

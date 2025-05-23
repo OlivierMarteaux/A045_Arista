@@ -8,7 +8,9 @@ import com.openclassrooms.arista.domain.model.User
 
 @Dao
 interface UserDao {
-    @Insert
+//    @Insert
+//    suspend fun insertUser(user: User)
+    @Upsert // Upsert (Insert or Update) : allow overwriting a line if it already exists
     suspend fun insertUser(user: User)
     @Query("SELECT * FROM User")
     suspend fun getUser(): User
