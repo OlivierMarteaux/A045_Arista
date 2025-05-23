@@ -3,13 +3,17 @@ package com.openclassrooms.arista.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationBarView
 import com.openclassrooms.arista.R
 import com.openclassrooms.arista.databinding.ActivityMainBinding
 import com.openclassrooms.arista.ui.exercise.ExerciseFragment
 import com.openclassrooms.arista.ui.sleep.SleepFragment
 import com.openclassrooms.arista.ui.user.UserDataFragment
+import com.openclassrooms.arista.utils.exportRoomDatabase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -31,6 +35,11 @@ class MainActivity : AppCompatActivity() {
                 .also { selectedMenuItemId = it }
             binding.bottomNavigation.selectedItemId = selectedMenuItemId
         }
+//        // Export database for initial database creation
+//        lifecycleScope.launch {
+//            delay(5000)
+//            exportRoomDatabase(this@MainActivity)
+//        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

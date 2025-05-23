@@ -4,12 +4,13 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Upsert
 import com.openclassrooms.arista.domain.model.Exercise
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseDao {
-    @Insert
+    @Upsert // Upsert (Insert or Update) : allow overwriting a line if it already exists
     suspend fun insertExercise(exercise: Exercise)
     @Delete
     suspend fun deleteExercise(exercise: Exercise)

@@ -9,14 +9,6 @@ import java.time.LocalDateTime
 
 @Entity(
     tableName = "exercise",
-//    foreignKeys = [
-//        ForeignKey(
-//            entity = ExerciseCategory::class,
-//            parentColumns = ["id"],
-//            childColumns = ["userId"],
-//            onDelete = ForeignKey.CASCADE
-//        )
-//    ]
 )
 data class Exercise(
     @PrimaryKey val id: Long? = null,
@@ -24,5 +16,4 @@ data class Exercise(
     var duration: Int,
     var category: ExerciseCategory,
     var intensity: Int,
-//    val userId: Int
 )
