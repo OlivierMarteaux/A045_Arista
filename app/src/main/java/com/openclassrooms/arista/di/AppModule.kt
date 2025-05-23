@@ -19,24 +19,21 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
+
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AristaDatabase {
-//        return Room
-//            .databaseBuilder(
-//                context,
-//                AristaDatabase::class.java,
-//                "arista.db")
-//            .createFromAsset("database/arista.db")
-//            .build()
         return AristaDatabase.getInstance(context)
     }
+
     @Provides
     @Singleton
     fun provideUserDao(database: AristaDatabase) = database.userDao()
+
     @Provides
     @Singleton
     fun provideSleepDao(database: AristaDatabase) = database.sleepDao()
+
     @Provides
     @Singleton
     fun provideExerciseDao(database: AristaDatabase) = database.exerciseDao()

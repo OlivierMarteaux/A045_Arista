@@ -15,8 +15,10 @@ import javax.inject.Inject
 //        }
 //}
 class UserRepository @Inject constructor(private val userDao: UserDao) {
+
     // Insert an user
     suspend fun insertUser(user: User) {userDao.insertUser(user)}
+
     // Get the current user
-    suspend fun getUser(): User {return userDao.getUser()}
+    suspend fun getUser(): User? {return userDao.getUser()}
 }
