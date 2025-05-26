@@ -85,7 +85,6 @@ class ExerciseDaoTest {
             assertEquals(exerciseList, retrievedExercises)
             cancel()
         }
-
     }
 
     @After

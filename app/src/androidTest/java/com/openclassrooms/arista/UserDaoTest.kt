@@ -3,10 +3,12 @@ package com.openclassrooms.arista
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
 import com.openclassrooms.arista.data.AristaDatabase
 import com.openclassrooms.arista.domain.model.User
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,10 +34,14 @@ class UserDaoTest {
     fun userDao_InsertUser_ReturnsCorrectUser() = runTest {
         // Given user is inserted in the database
         database.userDao().insertUser(user)
-        // When the user is retrieved from the database
-        val retrievedUser = database.userDao().getUser()
+        database.userDao().getUser().test{
+            // When the user is retrieved from the database
+            val retrievedUser = awaitItem()
+            // Then the retrieved user is the same as the inserted user
+            assertEquals(user, retrievedUser)
+            cancel()
+        }
         // Then the retrieved user is the same as the inserted user
-        assert(retrievedUser == user)
     }
 
     @After
