@@ -15,15 +15,26 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+/**
+ * ViewModel to manage the UI state and actions related to [Exercise] entities.
+ *
+ * @property getAllExercisesUseCase Use case to retrieve all exercises as a flow.
+ * @property addNewExerciseUseCase Use case to add a new exercise.
+ * @property deleteExerciseUseCase Use case to delete an existing exercise.
+ */
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val getAllExercisesUseCase: GetAllExercisesUseCase,
     private val addNewExerciseUseCase: AddNewExerciseUseCase,
     private val deleteExerciseUseCase: DeleteExerciseUseCase
 ) : ViewModel() {
+    /** StateFlow holding the current list of exercises for UI observation. */
     private val _exercisesFlow = MutableStateFlow<List<Exercise>>(emptyList())
     val exercisesFlow: StateFlow<List<Exercise>> = _exercisesFlow.asStateFlow()
 
+    /**
+     * Sample initial exercise data for seeding or testing purposes.
+     */
     private val exerciseData = mutableListOf(
         Exercise(1, LocalDateTime.now().minusHours(5), 30, ExerciseCategory.Running, 7),
         Exercise(
@@ -45,10 +56,15 @@ class ExerciseViewModel @Inject constructor(
     init {
 //        // Add some exercices for initial database creation:
 //        exerciseData.forEach {addNewExercise(it)}
-        // Load all exercises from the database:
+        // Load all exercises from the database on initialization
         viewModelScope.launch { loadAllExercises()}
     }
 
+    /**
+     * Deletes the specified [exercise] and reloads the exercise list.
+     *
+     * @param exercise The exercise to delete.
+     */
     fun deleteExercise(exercise: Exercise) {
         viewModelScope.launch {
             deleteExerciseUseCase.execute(exercise)
@@ -56,12 +72,20 @@ class ExerciseViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Loads all exercises from the database and updates the [_exercisesFlow].
+     */
     private suspend fun loadAllExercises() {
         getAllExercisesUseCase.execute().collect() {
             _exercisesFlow.value = it
         }
     }
 
+    /**
+     * Adds a new [exercise] to the database and reloads the exercise list.
+     *
+     * @param exercise The new exercise to add.
+     */
     fun addNewExercise(exercise: Exercise) {
         viewModelScope.launch {
             addNewExerciseUseCase.execute(exercise)

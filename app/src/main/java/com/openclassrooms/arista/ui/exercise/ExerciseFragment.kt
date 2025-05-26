@@ -25,6 +25,17 @@ interface DeleteExerciseInterface {
     fun deleteExercise(exercise: Exercise?)
 }
 
+/**
+ * Fragment displaying a list of exercises with functionality to add and delete exercises.
+ *
+ * Implements [DeleteExerciseInterface] to handle exercise deletion events from the adapter.
+ *
+ * Features:
+ * - Observes the [ExerciseViewModel] for exercise data updates.
+ * - Displays exercises in a RecyclerView using [ExerciseAdapter].
+ * - Provides a Floating Action Button (FAB) to open a dialog for adding new exercises.
+ * - Validates user input before adding new exercises.
+ */
 @AndroidEntryPoint
 class ExerciseFragment : Fragment(), DeleteExerciseInterface {
 
@@ -50,12 +61,18 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         observeExercises()
     }
 
+    /**
+     * Sets up the RecyclerView with [ExerciseAdapter] and a vertical linear layout manager.
+     */
     private fun setupRecyclerView() {
         exerciseAdapter = ExerciseAdapter(this)
         binding.exerciseRecyclerview.layoutManager = LinearLayoutManager(context)
         binding.exerciseRecyclerview.adapter = exerciseAdapter
     }
 
+    /**
+     * Observes the exercise list from the ViewModel and submits updates to the adapter.
+     */
     private fun observeExercises() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.exercisesFlow.collect { exercises ->
@@ -64,10 +81,17 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         }
     }
 
+    /**
+     * Sets up the Floating Action Button to open the add exercise dialog.
+     */
     private fun setupFab() {
         binding.fab.setOnClickListener { showAddExerciseDialog() }
     }
 
+    /**
+     * Displays a dialog allowing the user to add a new exercise.
+     * Validates inputs before adding.
+     */
     private fun showAddExerciseDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_add_exercise, null)
         setupDialogViews(dialogView).also {
@@ -80,6 +104,12 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         }
     }
 
+    /**
+     * Initializes dialog input views: duration EditText, category Spinner, and intensity EditText.
+     *
+     * @param dialogView The dialog's inflated view.
+     * @return A Triple containing the duration EditText, category Spinner, and intensity EditText.
+     */
     private fun setupDialogViews(dialogView: View): Triple<EditText, Spinner, EditText> {
         val durationEditText = dialogView.findViewById<EditText>(R.id.durationEditText)
         val categorySpinner = dialogView.findViewById<Spinner>(R.id.categorySpinner).apply {
@@ -95,6 +125,11 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         return Triple(durationEditText, categorySpinner, intensityEditText)
     }
 
+    /**
+     * Validates inputs and adds a new [Exercise] via the ViewModel.
+     *
+     * @param views Triple of duration EditText, category Spinner, and intensity EditText.
+     */
     private fun addExercise(views: Triple<EditText, Spinner, EditText>) {
         val (durationEditText, categorySpinner, intensityEditText) = views
 
@@ -115,6 +150,12 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         viewModel.addNewExercise(newExercise)
     }
 
+    /**
+     * Validates the duration input.
+     *
+     * @param duration The input duration string.
+     * @return True if valid, false otherwise (shows Toast on invalid input).
+     */
     private fun validateDuration(duration: String): Boolean {
         if (duration.isBlank()) {
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_SHORT).show()
@@ -123,6 +164,12 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         return true
     }
 
+    /**
+     * Validates the intensity input, ensuring it is a number between 1 and 10.
+     *
+     * @param intensity The input intensity string.
+     * @return True if valid, false otherwise (shows Toast on invalid input).
+     */
     private fun validateIntensity(intensity: String): Boolean {
         if (intensity.isBlank()) {
             Toast.makeText(requireContext(), R.string.fill_all_fields, Toast.LENGTH_SHORT).show()
@@ -157,6 +204,11 @@ class ExerciseFragment : Fragment(), DeleteExerciseInterface {
         _binding = null
     }
 
+    /**
+     * Called by the [ExerciseAdapter] when the user requests to delete an exercise.
+     *
+     * @param exercise The [Exercise] to delete.
+     */
     override fun deleteExercise(exercise: Exercise?) {
         exercise?.let { viewModel.deleteExercise(it) }
     }

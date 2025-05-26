@@ -1,34 +1,48 @@
 package com.openclassrooms.arista.data.repository
 
+import android.util.Log
 import com.openclassrooms.arista.data.dao.ExerciseDao
 import com.openclassrooms.arista.domain.model.Exercise
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
-//class ExerciseRepository(private val apiService: FakeApiService = FakeApiService()) {
-//
-//    // Get all exercises
-//    val allExercises: List<Exercise> get() = apiService.getAllExercises()
-//
-//    // Add a new exercise
-//    fun addExercise(exercise: Exercise) {
-//        apiService.addExercise(exercise)
-//    }
-//
-//    // Delete an exercise
-//    fun deleteExercise(exercise: Exercise) {
-//        apiService.deleteExercise(exercise)
-//    }
-//}
-
+/**
+ * Repository for managing exercise-related operations.
+ *
+ * Acts as an abstraction layer over [ExerciseDao] to handle data access and error logging.
+ *
+ * @property exerciseDao The DAO used to access exercise data from the local database.
+ */
 class ExerciseRepository @Inject constructor (private val exerciseDao: ExerciseDao) {
 
-    // Get all exercises
-    fun getAllExercises(): Flow<List<Exercise>> = exerciseDao.getAllExercises()
+    /**
+     * Retrieves a flow of all [Exercise] entities.
+     *
+     * @return A [Flow] emitting the list of exercises.
+     * Logs an error and returns an empty flow if an exception occurs.
+     */
+    fun getAllExercises(): Flow<List<Exercise>> =
+        try {exerciseDao.getAllExercises()}
+        catch (e: Exception) { Log.e("OM:ExerciseRepository.getAllExercises", e.message.toString()); emptyFlow()}
 
-    // Add a new exercise
-    suspend fun addExercise(exercise: Exercise) { exerciseDao.insertExercise(exercise) }
+    /**
+     * Inserts a new [Exercise] or updates it if it already exists.
+     *
+     * @param exercise The exercise to add.
+     * Logs an error if an exception occurs.
+     */
+    suspend fun addExercise(exercise: Exercise) =
+        try {exerciseDao.insertExercise(exercise)}
+        catch (e: Exception) { Log.e("OM:ExerciseRepository.addExercise", e.message.toString())}
 
-    // Delete an exercise
-    suspend fun deleteExercise(exercise: Exercise) { exerciseDao.deleteExercise(exercise) }
+    /**
+     * Deletes the specified [Exercise] from the database.
+     *
+     * @param exercise The exercise to delete.
+     * Logs an error if an exception occurs.
+     */
+    suspend fun deleteExercise(exercise: Exercise) =
+        try { exerciseDao.deleteExercise(exercise)}
+        catch (e: Exception) { Log.e("OM:ExerciseRepository.deleteExercise", e.message.toString())}
 }

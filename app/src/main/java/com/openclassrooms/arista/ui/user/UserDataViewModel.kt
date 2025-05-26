@@ -1,5 +1,6 @@
 package com.openclassrooms.arista.ui.user
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.openclassrooms.arista.domain.model.User
@@ -12,41 +13,34 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
-//class UserDataViewModel @Inject constructor(private val getUserUsecase: GetUserUsecase) :
-//    ViewModel() {
-//    private val _userFlow = MutableStateFlow<User?>(null)
-//    val userFlow: StateFlow<User?> = _userFlow.asStateFlow()
-//
-//    init {
-//        loadUserData()
-//    }
-//
-//    private fun loadUserData() {
-//        val user = getUserUsecase.execute()
-//        _userFlow.value = user
-//    }
-//}
-
+/**
+ * ViewModel responsible for managing and exposing user data to the UI.
+ *
+ * @property addUserUsecase Use case for adding or updating user information.
+ * @property getUserUsecase Use case for retrieving the current user as a flow.
+ */
 @HiltViewModel
 class UserDataViewModel @Inject constructor(
     private val addUserUsecase: AddUserUseCase,
     private val getUserUsecase: GetUserUsecase
 ) :
     ViewModel() {
+    /** StateFlow holding the current user data, observable by the UI. */
     private val _userFlow = MutableStateFlow<User?>(null)
     val userFlow: StateFlow<User?> = _userFlow.asStateFlow()
 
     init {
         viewModelScope.launch {
-//            // add user for initial database creation
-//            addUserUsecase.execute(User(1, "User", "user@example.com"))
+            Log.d("OM:UserDataViewModel", "Loading user data")
             loadUserData()
+            Log.d("OM:UserDataViewModel", "User data loaded")
         }
     }
 
+    /**
+     * Loads user data from the data source and updates the [_userFlow].
+     */
     private suspend fun loadUserData() {
-        val user = getUserUsecase.execute()
-        _userFlow.value = user
+        getUserUsecase.execute().collect{_userFlow.value = it}
     }
 }

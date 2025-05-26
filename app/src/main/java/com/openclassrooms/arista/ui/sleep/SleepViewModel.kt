@@ -15,33 +15,34 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-//@HiltViewModel
-//class SleepViewModel @Inject constructor(private val getAllSleepsUseCase: GetAllSleepsUseCase) :
-//    ViewModel() {
-//    private val _sleeps = MutableStateFlow<List<Sleep>>(emptyList())
-//    val sleeps: StateFlow<List<Sleep>> = _sleeps.asStateFlow()
-//
-//    fun fetchSleeps() {
-//        val sleepList = getAllSleepsUseCase.execute()
-//        _sleeps.value = sleepList
-//    }
-//}
-
+/**
+ * ViewModel to manage UI-related data and operations for [Sleep] records.
+ *
+ * @property addSleepUseCase Use case for inserting new sleep records.
+ * @property getAllSleepsUseCase Use case for retrieving all sleep records as a flow.
+ */
 @HiltViewModel
 class SleepViewModel @Inject constructor(
     private val addSleepUseCase: AddSleepUseCase,
     private val getAllSleepsUseCase: GetAllSleepsUseCase
 ) :
     ViewModel() {
+    /** StateFlow holding the current list of sleep records for UI observation. */
     private val _sleeps = MutableStateFlow<List<Sleep>>(emptyList())
     val sleeps: StateFlow<List<Sleep>> = _sleeps.asStateFlow()
 
+    /**
+     * Sample initial sleep data for seeding or testing purposes.
+     */
     private val sleepData = listOf(
         Sleep(1, LocalDateTime.now().minusDays(1), 7, 8),
         Sleep(2, LocalDateTime.now().minusDays(2), 6, 5),
         Sleep(3, LocalDateTime.now().minusDays(3), 8, 9)
     )
 
+    /**
+     * Loads all sleep records from the database and updates the [_sleeps] StateFlow.
+     */
     private suspend fun getAllSleeps() {
         getAllSleepsUseCase.execute().collect(){ _sleeps.value = it }
     }
@@ -50,7 +51,7 @@ class SleepViewModel @Inject constructor(
         viewModelScope.launch {
 //            // Add some sleep data for initial database creation:
 //            sleepData.forEach { addSleepUseCase.execute(it) }
-            // Collect sleep data from database:
+            // Load sleep data from the database on initialization
             getAllSleeps()
         }
     }
