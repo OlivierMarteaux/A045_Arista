@@ -14,6 +14,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -22,8 +25,16 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AristaDatabase {
-        return AristaDatabase.getInstance(context)
+    fun provideCoroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob() +
+    Dispatchers.IO)
+
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+        coroutineScope: CoroutineScope
+    ): AristaDatabase {
+        return AristaDatabase.getInstance(context, coroutineScope)
     }
 
     @Provides

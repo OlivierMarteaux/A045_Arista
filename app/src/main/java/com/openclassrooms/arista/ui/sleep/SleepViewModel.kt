@@ -15,18 +15,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-//@HiltViewModel
-//class SleepViewModel @Inject constructor(private val getAllSleepsUseCase: GetAllSleepsUseCase) :
-//    ViewModel() {
-//    private val _sleeps = MutableStateFlow<List<Sleep>>(emptyList())
-//    val sleeps: StateFlow<List<Sleep>> = _sleeps.asStateFlow()
-//
-//    fun fetchSleeps() {
-//        val sleepList = getAllSleepsUseCase.execute()
-//        _sleeps.value = sleepList
-//    }
-//}
-
 @HiltViewModel
 class SleepViewModel @Inject constructor(
     private val addSleepUseCase: AddSleepUseCase,

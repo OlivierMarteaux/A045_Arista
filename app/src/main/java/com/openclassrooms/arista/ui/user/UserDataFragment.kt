@@ -1,6 +1,7 @@
 package com.openclassrooms.arista.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,11 @@ import com.openclassrooms.arista.databinding.FragmentUserDataBinding
 import com.openclassrooms.arista.domain.model.User
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class UserDataFragment : Fragment() {
@@ -31,9 +34,11 @@ class UserDataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.userFlow.collect { user: User? ->
+                Log.d("OM:UserDataFragment", "Check user existence")
                 user?.let {
                     binding.etName.setText(it.name)
                     binding.etEmail.setText(it.email)
+                    Log.d("OM:UserDataFragment", "User data loaded: $it")
                 }
             }
         }
