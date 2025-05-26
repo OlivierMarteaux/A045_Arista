@@ -11,6 +11,18 @@ import com.openclassrooms.arista.ui.sleep.SleepFragment
 import com.openclassrooms.arista.ui.user.UserDataFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * MainActivity serves as the host activity for the application, managing navigation between fragments.
+ *
+ * Uses [ActivityMainBinding] for view binding and handles bottom navigation interactions.
+ *
+ * Features:
+ * - Initializes and displays the default fragment ([UserDataFragment]) on first launch.
+ * - Maintains and restores the selected bottom navigation item on configuration changes.
+ * - Switches between fragments ([UserDataFragment], [ExerciseFragment], [SleepFragment]) based on bottom navigation selection.
+ *
+ * The activity is annotated with [AndroidEntryPoint] for Hilt dependency injection support.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -47,6 +59,12 @@ class MainActivity : AppCompatActivity() {
         } ?: false
     }
 
+    /**
+     * Returns the Fragment corresponding to the given menu item id.
+     *
+     * @param menuId The id of the selected bottom navigation menu item.
+     * @return The associated Fragment instance or null if no match is found.
+     */
     private fun getFragmentById(menuId: Int): Fragment? {
         return when (menuId) {
             R.id.nav_user_data -> UserDataFragment()

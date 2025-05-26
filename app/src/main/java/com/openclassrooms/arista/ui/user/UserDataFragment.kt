@@ -16,6 +16,22 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
+/**
+ * Fragment responsible for displaying and managing user data.
+ *
+ * Uses [UserDataViewModel] to observe the current user information and updates the UI accordingly.
+ * The fragment is annotated with [AndroidEntryPoint] to support Hilt dependency injection.
+ *
+ * Lifecycle:
+ * - Inflates the layout via view binding in [onCreateView].
+ * - Observes the user data flow from the ViewModel in [onViewCreated], updating the UI fields when data changes.
+ *
+ * UI Elements:
+ * - EditText for user's name (`etName`)
+ * - EditText for user's email (`etEmail`)
+ *
+ * Logs user data loading and existence checks for debugging purposes.
+ */
 @AndroidEntryPoint
 class UserDataFragment : Fragment() {
     private lateinit var binding: FragmentUserDataBinding

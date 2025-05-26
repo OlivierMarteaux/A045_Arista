@@ -5,6 +5,15 @@ import android.widget.Toast
 import com.openclassrooms.arista.data.AristaDatabase
 import java.io.File
 
+/**
+ * Exports the Room database file to the external files directory of the app.
+ *
+ * This function closes the database instance to ensure all pending writes are flushed,
+ * then copies the database file to a new location accessible to the user.
+ * Finally, it shows a Toast message with the export file path.
+ *
+ * @param context The application context used to access the database and file system.
+ */
 //fun exportRoomDatabase(context: Context) {
 //    val dbName = "arista.db"
 //    val db = context.getDatabasePath(dbName)

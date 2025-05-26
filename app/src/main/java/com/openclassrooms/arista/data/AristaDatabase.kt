@@ -22,6 +22,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
+/**
+ * The Room database for the Arista app.
+ *
+ * This database holds entities for [User], [Sleep], and [Exercise], and provides DAOs for accessing them.
+ * It also defines a singleton pattern and a callback to populate the database on first creation.
+ *
+ * Annotated with [@Database] to specify the entities and version.
+ * Annotated with [@TypeConverters] to handle custom data types like [LocalDateTime] and [ExerciseCategory].
+ */
 @Database(entities = [User::class, Sleep::class, Exercise::class], version = 1, exportSchema = true)
 @TypeConverters(DateConverter::class, ExerciseCategoryConverter::class)
 abstract class AristaDatabase: RoomDatabase() {
@@ -29,8 +38,13 @@ abstract class AristaDatabase: RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun sleepDao(): SleepDao
     abstract fun exerciseDao(): ExerciseDao
-    
-    // callback to pre-populate the database at first app opening
+
+    /**
+     * A [RoomDatabase.Callback] to populate the database with initial data
+     * when it is first created.
+     *
+     * @property scope The [CoroutineScope] used to run the population asynchronously.
+     */
     private class AristaDatabaseCallback(
         private val scope: CoroutineScope
     ) : Callback() {
@@ -47,9 +61,18 @@ abstract class AristaDatabase: RoomDatabase() {
 
     // a singleton instance of the database
     companion object {
+        /**
+         * A volatile singleton instance of [AristaDatabase] to prevent race conditions.
+         */
         @Volatile
         private var INSTANCE: AristaDatabase? = null
-
+        /**
+         * Returns the singleton instance of [AristaDatabase].
+         *
+         * @param context The application context.
+         * @param coroutineScope The coroutine scope used for initial population.
+         * @return The singleton [AristaDatabase] instance.
+         */
         fun getInstance(context: Context, coroutineScope: CoroutineScope): AristaDatabase {
 //            context.deleteDatabase("app_database") // ✅ Ensure onCreate runs in debug
             return INSTANCE?: synchronized(this) {
@@ -66,7 +89,13 @@ abstract class AristaDatabase: RoomDatabase() {
                 return instance
             }
         }
-
+        /**
+         * Populates the database with sample data on first launch.
+         *
+         * @param userDao DAO for inserting user data.
+         * @param sleepDao DAO for inserting sleep records.
+         * @param exerciseDao DAO for inserting exercise entries.
+         */
         suspend fun populateDatabase(userDao: UserDao, sleepDao: SleepDao, exerciseDao: ExerciseDao) {
             val userData = User(1, "User", "user@example.com")
             val sleepData = listOf(

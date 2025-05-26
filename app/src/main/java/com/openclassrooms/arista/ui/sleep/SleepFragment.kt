@@ -12,6 +12,12 @@ import com.openclassrooms.arista.databinding.FragmentSleepBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Fragment displaying a list of sleep records.
+ *
+ * Observes [SleepViewModel] for sleep data updates and displays them in a RecyclerView
+ * using [SleepAdapter].
+ */
 @AndroidEntryPoint
 class SleepFragment : Fragment() {
 
@@ -37,6 +43,9 @@ class SleepFragment : Fragment() {
         binding.sleepRecyclerview.adapter = sleepAdapter
     }
 
+    /**
+     * Collects the sleep list from the ViewModel and updates the adapter data accordingly.
+     */
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.sleeps.collect { sleeps ->
