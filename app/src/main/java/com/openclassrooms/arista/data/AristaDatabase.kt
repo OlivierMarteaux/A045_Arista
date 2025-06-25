@@ -83,7 +83,7 @@ abstract class AristaDatabase: RoomDatabase() {
                         AristaDatabase::class.java,
                         "arista.db"
                     )
-                .addCallback(AristaDatabaseCallback(CoroutineScope(Dispatchers.IO)))
+                .addCallback(AristaDatabaseCallback(coroutineScope))
                 .build()
                 INSTANCE = instance
                 return instance
